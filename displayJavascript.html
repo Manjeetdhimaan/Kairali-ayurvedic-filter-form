@@ -1,0 +1,84 @@
+<script>
+    /*
+    *THIS FUNCTION CALL THE getData() FUNCTION IN THE Code.gs FILE, 
+    *AND PASS RETURNED DATA TO showData() FUNCTION
+    */
+    google.script.run.withSuccessHandler(showData).getData();
+  
+    //THIS FUNCTION GENERATE THE DATA TABLE FROM THE DATA ARRAY
+    function showData(dataArray){
+      
+        var minDate, maxDate;
+      
+      // Custom filtering function which will search data in column four between two values
+      $.fn.dataTable.ext.search.push(
+          function( settings, data, dataIndex ) {
+              var min = minDate.val();
+              var max = maxDate.val();
+              var date = new Date( data[12] );
+      
+              if (
+                  ( min === null && max === null ) ||
+                  ( min === null && date <= max ) ||
+                  ( min <= date   && max === null ) ||
+                  ( min <= date   && date <= max )
+              ) {
+                  return true;
+              }
+              return false;
+          }
+      );  
+      $(document).ready(function(){
+         // Create date inputs
+        minDate = new DateTime($('#min'), {
+            //format: 'MMMM Do YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            //format: 'MMMM Do YYYY'
+        });
+  
+        
+       var table = $('#data-table').DataTable({
+          data: dataArray,
+          //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
+          columns: [
+            {"title":"Status"},
+            {"title":"ROOM"},
+            {"title":"Time slot"},
+            {"title":"Client Name"},
+            {"title":"Gender"},
+            {"title":"Therpay Dur"},
+            {"title":"Service Type"},
+            {"title":"Therapy 1"},
+            {"title":"Therapy 2"},
+            {"title":"Therapist 1"},
+            {"title":"Therapist 2"},
+            {"title":"Therapist 3"},
+            {"title":"Date of Booking"}],
+          buttons: [ 'colvis' ],
+          dom:
+              "<'row'<'col-md-12 col-md-4'l><'col-md-12 col-md-4'B><'col-md-12 col-md-4'f>>" +
+              "<'row'<'col-md-12'tr>>" +
+              "<'row'<'col-md-12 col-md-5'i><'col-md-12 col-md-7'p>>",
+        });
+  
+          // Refilter the table
+        $('#min, #max').on('change', function () {
+            table.draw();
+        });
+  
+       $(".filterhead").each( function ( i ) {
+          var select = $('<select class="form-control form-control-md"><option value=""></option></select>')
+              .appendTo( $(this).empty() )
+              .on( 'change', function () {
+                 var term = $(this).val();
+                  table.column( i ).search(term, false, false ).draw();
+              } );
+             table.column( i ).data().unique().sort().each( function ( d, j ) {
+                  select.append( '<option value="'+d+'">'+d+'</option>' )
+          } );
+          } );
+  
+      });
+    }
+  </script>

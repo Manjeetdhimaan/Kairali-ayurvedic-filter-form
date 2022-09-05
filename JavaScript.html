@@ -1,0 +1,617 @@
+<script>
+  // Prevent forms from submitting.
+  function preventFormSubmit() {
+    var forms = document.querySelectorAll('form');
+    for (var i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', function(event) {
+      event.preventDefault();
+      });
+    }
+  }
+  window.addEventListener("load", functionInit, true); 
+  
+  //INITIALIZE FUNCTIONS ONLOAD
+  function functionInit(){  
+    preventFormSubmit();
+    getLastTenRows();
+  };      
+  
+  //HANDLE FORM SUBMISSION
+  function handleFormSubmit(formObject) {
+    google.script.run.withSuccessHandler(createTable).processForm(formObject);
+    document.getElementById("myForm").reset();
+  }
+  
+  //GET LAST 10 ROWS
+  function getLastTenRows (){
+   google.script.run.withSuccessHandler(createTable).getLastTenRows();
+  }
+  
+  
+  //GET ALL DATA
+  function getAllData(){
+    //document.getElementById('dataTable').innerHTML = "";
+    google.script.run.withSuccessHandler(createTable).getAllData();
+  }
+  
+  
+  //CREATE THE DATA TABLE
+  function createTable(dataArray) {
+    if(dataArray){
+          var startDate = document.getElementById('min');
+          var endDate = document.getElementById('max');
+          if(startDate && endDate) {
+  if(startDate.value&& endDate.value){
+                dataArray = dataArray.filter(
+                  function (a)
+                  {
+                      return (a[7]) >= String(startDate.value) && (a[7]) <= String(endDate.value);
+                  });
+           }
+          }
+         
+      var result = "<table class='table table-sm' style='font-size:0.8em'>"+
+                   "<thead style='white-space: nowrap'>"+
+                     "<tr>"+                               //Change table headings to match witht he Google Sheet
+                      "<th scope='col'>Delete</th>"+
+                      "<th scope='col'>Edit</th>"+
+                      "<th scope='col'>ID</th>"+
+                      "<th scope='col'>Client Type</th>"+
+                      "<th scope='col'>Client Name</th>"+
+                      "<th scope='col'>Mobile</th>"+
+                      "<th scope='col'>Gender</th>"+
+                      "<th scope='col'>Address</th>"+
+                      "<th scope='col'>City</th>"+
+                      "<th scope='col'>Date of Booking</th>"+
+                      "<th scope='col'>Service Type</th>"+
+                      "<th scope='col'>Email</th>"+
+                      "<th scope='col'>SPT NO</th>"+
+                      "<th scope='col'>Time Slot</th>"+
+                      "<th scope='col'>Room</th>"+
+                      "<th scope='col'>Therapy 1</th>"+
+                      "<th scope='col'>Therapy 2</th>"+
+                      "<th scope='col'>Client Status</th>"+
+                      "<th scope='col'>Paid/Unpaid</th>"+
+                      "<th scope='col'>Therapy 1 Amount</th>"+
+                      "<th scope='col'>Therapy 2 Amount</th>"+
+                      "<th scope='col'>Discount</th>"+
+                      "<th scope='col'>Coupon Apply</th>"+
+                      "<th scope='col'>Total Service Amount</th>"+
+                      "<th scope='col'>Final Amount</th>"+
+                      "<th scope='col'>Payment Method</th>"+
+                      "<th scope='col'>HMT Name</th>"+
+                      "<th scope='col'>Therapist 1</th>"+
+                      "<th scope='col'>Therapist 2</th>"+
+                      "<th scope='col'>Therapist 3</th>"+
+                      "<th scope='col'>Status</th>"+
+                    "</tr>"+
+                  "</thead>";
+      for(var i=0; i<dataArray.length; i++) {
+          result += "<tr>";
+          result += "<td><button type='button' class='btn btn-danger btn-xs deleteBtn' onclick='deleteData(this);'>Delete</button></td>";
+          result += "<td><button type='button' class='btn btn-warning btn-xs editBtn' onclick='editData(this);'>Edit</button></td>";
+          for(var j=0; j<dataArray[i].length; j++){
+              result += "<td>"+dataArray[i][j]+"</td>";
+          }
+          result += "</tr>";
+      }
+      result += "</table>";
+      var div = document.getElementById('dataTable');
+      div.innerHTML = result;
+      document.getElementById("message").innerHTML = "";
+    }else{
+      var div = document.getElementById('dataTable');
+      div.innerHTML = "Data not found!";
+    }
+  }
+  //DELETE DATA
+  function deleteData(el) {
+    var result = confirm("Want to delete?");
+    if (result) {
+      var recordId = el.parentNode.parentNode.cells[2].innerHTML;
+      google.script.run.withSuccessHandler(createTable).deleteData(recordId);
+    }
+  }
+  
+  
+  
+  //EDIT DATA
+  function editData(el){
+    var recordId = el.parentNode.parentNode.cells[2].innerHTML; //https://stackoverflow.com/a/32377357/2391195
+    google.script.run.withSuccessHandler(populateForm).getRecordById(recordId);
+  }
+  function clearFilter() {
+          var startDate = document.getElementById('min');
+          var endDate = document.getElementById('max');
+          startDate.value = '';
+          endDate.value = '';
+          getAllData();
+  }
+
+  //POPULATE FORM
+  function populateForm(records){
+    document.getElementById('RecId').value = records[0][0];
+    document.getElementById('clnt').value = records[0][1];
+    document.getElementById('clntnm').value = records[0][2];
+    document.getElementById('crrolor').value = records[0][3];
+    document.getElementById('mf').value = records[0][4];
+    document.getElementById('adr').value = records[0][5];
+    document.getElementById('cty').value = records[0][6];
+    document.getElementById('datepicker').value = records[0][7];
+    document.getElementById('color').value = records[0][8];
+    document.getElementById('eml').value = records[0][9];
+    document.getElementById('wmtn').value = records[0][10];
+    document.getElementById('tmslt').value = records[0][11];
+    document.getElementById('rm').value = records[0][12];
+    document.getElementById('fruit').value = records[0][13];
+    document.getElementById('crolorr').value = records[0][14];
+    document.getElementById('clntt').value = records[0][15];
+    document.getElementById('pdupd').value = records[0][16];
+    document.getElementById('thrpamtone').value = records[0][17];
+    document.getElementById('thrppamtwo').value = records[0][18];
+    document.getElementById('dscnt').value = records[0][19];
+    document.getElementById('cnaply').value = records[0][20];
+    document.getElementById('tsamt').value = records[0][21];
+    document.getElementById('fnlamt').value = records[0][22];
+    document.getElementById('pymt').value = records[0][23];
+    document.getElementById('hmt').value = records[0][24];
+    document.getElementById('asnone').value = records[0][25];
+    document.getElementById('asnto').value = records[0][26];
+    document.getElementById('asnthr').value = records[0][27];
+    document.getElementById('sts').value = records[0][28];
+   
+    
+    document.getElementById("message").innerHTML = "<div class='alert alert-warning' role='alert'>Update Record [ID: "+records[0][0]+"]</div>";
+  }
+  
+  
+    function cal()  {
+    var fnlamt = +document.getElementById("thrpamtone").value + +document.getElementById("thrppamtwo").value;
+    document.getElementById("fnlamt").value = fnlamt;
+
+    var percentage = "100";
+    var tsamt = fnlamt - ( document.getElementById("fnlamt").value *  (document.getElementById("dscnt").value / percentage ) );
+    var cpn = tsamt - document.getElementById("cnaply").value;
+    document.getElementById("tsamt").value = cpn;
+
+    }
+
+
+
+
+
+    // Display TB
+
+
+    /*
+  *THIS FUNCTION CALL THE getData() FUNCTION IN THE Code.gs FILE, 
+  *AND PASS RETURNED DATA TO showData() FUNCTION
+  */
+  google.script.run.withSuccessHandler(showData).getData();
+
+  //THIS FUNCTION GENERATE THE DATA TABLE FROM THE DATA ARRAY
+
+function showTableData(dataArray) {
+     var minDate, maxDate;
+    
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[12] );
+    
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );  
+    $(document).ready(function(){
+       // Create date inputs
+      minDate = new DateTime($('#min'), {
+          //format: 'MMMM Do YYYY'
+      });
+      maxDate = new DateTime($('#max'), {
+          //format: 'MMMM Do YYYY'
+      });
+
+    if(dataArray){
+
+      var result = "<table class='table table-sm' style='font-size:0.8em'>"+
+                   "<thead style='white-space: nowrap'>"+
+                     "<tr>"+                               //Change table headings to match witht he Google Sheet
+                      "<th scope='col'>Status</th>"+
+                      "<th scope='col'>ROOM</th>"+
+                      "<th scope='col'>Time slot</th>"+
+                      "<th scope='col'>Client Name</th>"+
+                      "<th scope='col'>Gender</th>"+
+                      "<th scope='col'>Therpay Dur</th>"+
+                      "<th scope='col'>Service Type</th>"+
+                      "<th scope='col'>Therapy 1</th>"+
+                      "<th scope='col'>Therapy 2</th>"+
+                      "<th scope='col'>Therapist 1</th>"+
+                      "<th scope='col'>Therapist 2</th>"+
+                      "<th scope='col'>Therapist 3</th>"+
+                      "<th scope='col'>Date of Booking</th>"+
+                    "</tr>"+
+                  "</thead>";
+      for(var i=0; i<dataArray.length; i++) {
+          result += "<tr>";
+         
+          for(var j=0; j<dataArray[i].length; j++){
+              result += "<td>"+dataArray[i][j]+"</td>";
+          }
+          result += "</tr>";
+      }
+      result += "</table>";
+      var div = document.getElementById('data-table');
+      div.innerHTML = result;
+      // document.getElementById("message").innerHTML = "";
+    }else{
+      var div = document.getElementById('data-table');
+      div.innerHTML = "Data not found!";
+    }
+
+        // Refilter the table
+      $('#min, #max').on('change', function () {
+          table.draw();
+      });
+
+     $(".filterhead").each( function ( i ) {
+        var select = $('<select class="form-control form-control-md"><option value=""></option></select>')
+            .appendTo( $(this).empty() )
+            .on( 'change', function () {
+               var term = $(this).val();
+                table.column( i ).search(term, false, false ).draw();
+            } );
+ 	      table.column( i ).data().unique().sort().each( function ( d, j ) {
+            	select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+		} );
+
+    });
+}
+
+  function showData(dataArray){
+    
+      var minDate, maxDate;
+    
+    // Custom filtering function which will search data in column four between two values
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[12] );
+    
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );  
+    $(document).ready(function(){
+       // Create date inputs
+      minDate = new DateTime($('#min'), {
+          //format: 'MMMM Do YYYY'
+      });
+      maxDate = new DateTime($('#max'), {
+          //format: 'MMMM Do YYYY'
+      });
+
+      
+     var table = $('#data-table').DataTable({
+        data: dataArray,
+        //CHANGE THE TABLE HEADINGS BELOW TO MATCH WITH YOUR SELECTED DATA RANGE
+        columns: [
+          {"title":"Status"},
+          {"title":"ROOM"},
+          {"title":"Time slot"},
+          {"title":"Client Name"},
+          {"title":"Gender"},
+          {"title":"Therpay Dur"},
+          {"title":"Service Type"},
+          {"title":"Therapy 1"},
+          {"title":"Therapy 2"},
+          {"title":"Therapist 1"},
+          {"title":"Therapist 2"},
+          {"title":"Therapist 3"},
+          {"title":"Date of Booking"}],
+        buttons: [ 'colvis' ],
+        dom:
+            "<'row'<'col-md-12 col-md-4'l><'col-md-12 col-md-4'B><'col-md-12 col-md-4'f>>" +
+            "<'row'<'col-md-12'tr>>" +
+            "<'row'<'col-md-12 col-md-5'i><'col-md-12 col-md-7'p>>",
+      });
+
+        // Refilter the table
+      $('#min, #max').on('change', function () {
+          table.draw();
+      });
+
+     $(".filterhead").each( function ( i ) {
+        var select = $('<select class="form-control form-control-md"><option value=""></option></select>')
+            .appendTo( $(this).empty() )
+            .on( 'change', function () {
+               var term = $(this).val();
+                table.column( i ).search(term, false, false ).draw();
+            } );
+ 	      table.column( i ).data().unique().sort().each( function ( d, j ) {
+            	select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+		} );
+
+    });
+  }
+
+  window.onload = () => {
+  google.script.run.withSuccessHandler(loadObject).getObject();
+}
+
+const loadObject = function(subjectObject) {
+  var subjectSel = document.getElementById("color");
+  var topicSel = document.getElementById("crolor");
+  var topicSel2 = document.getElementById("crolorr");
+  var chapterSel = document.getElementById("thrpamtone");
+  var chapterSel2 = document.getElementById("thrppamtwo");
+  for (var x in subjectObject) {
+    subjectSel.options[subjectSel.options.length] = new Option(x, x);
+  }
+  subjectSel.onchange = function() {
+    //empty Chapters- and Topics- dropdowns
+    chapterSel.length = 1;
+chapterSel2.length = 1;
+    topicSel.length = 1;
+ topicSel2.length = 1;
+    //display correct values
+    for (var y in subjectObject[this.value]) {
+      topicSel.options[topicSel.options.length] = new Option(y, y);
+    }
+     for (var y in subjectObject[this.value]) {
+      topicSel2.options[topicSel2.options.length] = new Option(y, y);
+    }
+  }
+  topicSel.onchange = function() {
+    //empty Chapters dropdown
+    chapterSel.length = 1;
+    //display correct values
+    var z = subjectObject[subjectSel.value][this.value];
+    for (var i = 0; i < z.length; i++) {
+      chapterSel.options[chapterSel.options.length] = new Option(z[i], z[i]);
+    }
+  }
+  topicSel2.onchange = function() {
+    //empty Chapters dropdown
+    chapterSel2.length = 1;
+    //display correct values
+    var z = subjectObject[subjectSel.value][this.value];
+    for (var i = 0; i < z.length; i++) {
+      chapterSel2.options[chapterSel2.options.length] = new Option(z[i], z[i]);
+    }
+  }
+}
+
+
+function GetFruit(color) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    fruit.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    fruit.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      fruit.appendChild(option);    
+    });
+    
+    }).getFruits(color);
+    
+    };
+  function GetFruits(crolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    thrpamtone.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    thrpamtone.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      thrpamtone.appendChild(option);    
+    });
+    
+    }).getFruitss(crolor);
+    
+    };
+    function GetFruitss(crolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    thrppamtwo.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    thrppamtwo.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      thrppamtwo.appendChild(option);    
+    });
+    
+    }).getFruitss(crolor);
+    
+    };
+    function GetFruitssr(crrolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    wmtn.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    wmtn.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      wmtn.appendChild(option);    
+    });
+    
+    }).getFrruitss(crrolor);
+    
+    };
+
+
+
+
+    function GetFruit(color) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    fruit.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    fruit.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      fruit.appendChild(option);    
+    });
+    
+    }).getFruits(color);
+    
+    };
+  function GetFruits(crolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    thrpamtone.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    thrpamtone.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      thrpamtone.appendChild(option);    
+    });
+    
+    }).getFruitss(crolor);
+    
+    };
+    function GetFruitss(crolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    thrppamtwo.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    thrppamtwo.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      thrppamtwo.appendChild(option);    
+    });
+    
+    }).getFruitss(crolor);
+    
+    };
+    function GetFruitssr(crrolor) 
+    {
+    
+    google.script.run.withSuccessHandler(function(ar) 
+    {
+
+    console.log(ar);
+    
+    wmtn.length = 0;
+    
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "";
+    wmtn.appendChild(option);
+    
+    ar.forEach(function(item, index) 
+    {    
+      let option = document.createElement("option");
+      option.value = item;
+      option.text = item;
+      wmtn.appendChild(option);    
+    });
+    
+    }).getFrruitss(crrolor);
+    
+    };
+</script>

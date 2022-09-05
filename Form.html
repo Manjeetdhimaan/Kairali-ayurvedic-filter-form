@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .btn-group-xs>.btn,
+    .btn-xs {
+      padding: .25rem .4rem;
+      font-size: .875rem;
+      line-height: .5;
+      border-radius: .2rem;
+    }
+
+    .min-group-xs>.min,
+    .min-xs {
+      padding: .25rem .4rem;
+      font-size: .875rem;
+      line-height: .5;
+      border-radius: .2rem;
+    }
+
+    .max-group-xs>.max,
+    .max-xs {
+      padding: .25rem .4rem;
+      font-size: .875rem;
+      line-height: .5;
+      border-radius: .2rem;
+    }
+
+    #myForm {
+      width: 1020px;
+      height: 450px
+        /* background-color: rgba(30,39,39, 0.3 ); */
+        box-shadow: 0 5px 30px black;
+    }
+
+    .container {
+
+      justify-content: center;
+      align-items: center;
+    }
+
+    marquee {
+      background-color: green;
+      display: flex;
+      align-items: center;
+      height: 60px;
+      color: #fff;
+    }
+
+    bg-light {
+      background-color: #aaa !important;
+    }
+
+    body,
+    html {
+      height: 100%;
+    }
+
+    .bg {
+      /* The image used */
+      background-image: url("https://www.keralatourism.org/images/service-providers/photos/property-5199-profile-26612-20220104102343.jpg");
+
+      /* Full height */
+      height: 100%;
+
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .text-dark{
+      color:#fff;
+    }
+  </style>
+  <base target="_top">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+    integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous">
+  </script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <?!= include('JavaScript'); ?>
+  <!-- See JavaScript.html file -->
+
+
+</head>
+
+<body class="bg">
+
+
+
+  <marquee behavior="scroll" direction="left">Kairali ayurvedic centre</marquee>
+
+
+  <?var url = getPageUrl();?>
+
+ <?var colors = getColors();?>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href='<?=url?>?page=Form'>BOOKING FORM</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href='<?=url?>?page=Display'>DISPLAY TB</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href=""></a> // OTHER NAV BAR
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container ">
+    <div class="row text-light">
+      <div class="col-xl-12">
+
+
+
+
+        <form id="myForm" class=" bg-secondary" onsubmit="handleFormSubmit(this)"> <!-- Call JavaScript function "handleFormSubmit" -->
+    <p class="h4 mb-3 text-center">Duty Chart Booking Form</p>
+    <div id="message"></div>
+    <input type="text" id="RecId" name="RecId" value="" style="display: none">
+
+	<div class="form-row">
+    <div class="form-group col-md-3">
+		<label for="clnt" >Client Type</label>
+		<select class="form-control" id="clnt" name="clnt">
+      <option value=""></option>
+      <option value="New">New</option>
+      <option value="Existing">Existing</option>
+      <option value="Reference">Reference</option>
+    </select>
+	</div>
+  <div class="form-group col-md-3">
+			<label for="clntnm">Client Name</label>
+			<input type="text" class="form-control" id="clntnm" name="clntnm">
+		</div>
+    <div class="form-group col-md-3">
+			<label for="crrolor">Mobile No</label>
+			<input type="text" class="form-control" id="crrolor" onchange="GetFruitssr(this.value)" name="crrolor">
+		</div>
+    <div class="form-group col-md-3">
+		<label for="mf">Gender</label>
+		<select class="form-control" id="mf" name="mf">
+      <option value=""></option>
+      <option value="Male">Male</option>
+      <option value="Male">Female</option>
+    </select>
+  </div>
+		<div class="form-group col-lg-4">
+		<label for="adr" >Address</label>
+		<input type="text" class="form-control" id="adr" name="adr" placeholder="" required>
+	</div>
+  <div class="form-group col-md-2">
+			<label for="cty">City</label>
+			<input type="text" class="form-control" id="cty" name="cty">
+		</div>
+    <div class="form-group col-md-3">
+			<label for="datepicker">Date of Booking</label>
+			<input type="date" class="form-control" id="datepicker" name="datepicker">
+		</div>
+    <div class="form-group col-md-3">
+			<label for="color">Service Type</label>
+			<select name="color" id="color"style="font-size: 15px" class="form-control" onchange="GetFruit(this.value)" placeholder="******">
+      <option value="" ></option>
+      <? for(var i = 0; i < colors.length; i++) { ?>      
+      <option value="<?= colors[i] ?>" ><?= colors[i] ?></option><? } ?>
+    </select>
+		</div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+		<label for="eml" >Email Id</label>
+		<input type="email" class="form-control" id="eml" name="eml" placeholder="" required>
+	</div>
+  <div class="form-group col-md-3">
+			<label for="">SPT No</label>
+			<select name="wmtn" id="wmtn" style="font-size: 15px" class="form-control" placeholder="******"></select>
+		</div>
+    <div class="form-group col-md-3">
+			<label for="tmslt">Time Slot</label>
+			<select type="text"name="tmslt" id="tmslt" class="form-control" style="font-size: 15px" placeholder="******">
+      <option value="" ></option>
+      <? for(var i = 0; i < rcrolors.length; i++) { ?>      
+      <option value="<?= rcrolors[i] ?>" ><?= rcrolors[i] ?></option><? } ?>
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+		<label for="rm">Room</label>
+		<select class="form-control" id="rm" name="rm">
+      <option value=""></option>
+      <option value="Tamara">Tamara</option>
+      <option value="Ambal">Ambal</option>
+      <option value="Pichakam">Pichakam</option>
+      <option value="Techi">Techi</option>
+      <option value="Mandaram">Mandaram</option>
+      <option value="Extra Room">Extra Room</option>
+      <option value="Dr Appointment">Dr Appointment</option>
+    </select>
+		</div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-lg-3">
+		<label for="crolor" >Therapy 1</label>
+		<select name="crolor" id="fruit"style="font-size: 13px" class="form-control" onchange="GetFruits(this.value)" placeholder="******">>
+    <option value="" ></option>
+    <? for(var i = 0; i < crolors.length; i++) { ?>      
+    <option value="<?= crolors[i] ?>" ><?= crolors[i] ?></option><? } ?>
+    </select>
+	</div>
+  <div class="form-group col-md-3">
+			<label for="crolorr">Therapy 2</label>
+			<select name="crolorr" id="crolorr"  style="font-size: 13px" class="form-control"  onchange="GetFruitss(this.value)" placeholder="******">>
+      <option value="" ></option>
+      <? for(var i = 0; i < crolors.length; i++) { ?>      
+      <option value="<?= crolors[i] ?>" ><?= crolors[i] ?></option><? } ?>
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+		<label for="clntt">Client Status</label>
+		<select class="form-control" id="clntt" name="clntt">
+      <option value=""></option>
+      <option value="VIP">VIP</option>
+      <option value="Regular">Regular</option>
+      <option value="HNI">HNI</option>
+      <option value="Govt">Govt</option>
+    </select>
+	</div>
+    <div class="form-group col-md-3">
+		<label for="pdupd">Paid/Unpaid</label>
+		<select class="form-control" id="pdupd" name="pdupd">
+      <option value=""></option>
+      <option value="Paid">Paid</option>
+      <option value="Unpaid">Unpaid</option>
+      <option value="Complimentary">Complimentary</option>
+      <option value="Voucher">Voucher</option></select>
+	</div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+		<label for="thrpamtone" >Therapy 1 Amount</label>
+		<select name="thrpamtone" id="thrpamtone" class="form-control" style="font-size: 15px"placeholder="******"></select>
+	</div>
+  <div class="form-group col-md-3">
+			<label for="thrppamtwo">Therapy 2 Amount</label>
+			<select name="thrppamtwo" id="thrppamtwo" class="form-control" style="font-size: 15px"placeholder="******" onchange="cal();">
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+			<label for="dscnt">Discount</label>
+			<input type="text" class="form-control" id="dscnt" name="dscnt" onchange="cal();">
+		</div>
+    <div class="form-group col-md-3">
+			<label for="cnaply">Coupon Apply</label>
+			<input type="text" class="form-control" id="cnaply" name="cnaply">
+		</div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+			<label for="fnlamt">Total Service Amount</label>
+			<input type="text" class="form-control" id="fnlamt" name="fnlamt" onchange="cal();">
+		</div>
+    <div class="form-group col-md-3">
+		<label for="tsamt" >Final Amount</label>
+		<input type="text" class="form-control" id="tsamt" name="tsamt"  placeholder="" required>
+	</div>
+    <div class="form-group col-md-3">
+		<label for="pymt">Payment Method</label>
+		  <select class="form-control" id="pymt" name="pymt">
+      <option value=""></option>
+      <option value="Cash">Cash</option>
+      <option value="Card">Card</option>
+      <option value="Paytm">Paytm</option>
+      <option value="Gpay">Gpay</option>
+      <option value="Cheque">Cheque</option>
+      <option value="Bank-NEFT">Bank-NEFT</option>
+      <option value="Quick-Wallet">Quick-Wallet</option>
+      <option value="Payu">Payu</option>
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+		<label for="hmt">HMT Name</label>
+		<select class="form-control" id="hmt" name="hmt">
+      <option value=""></option>
+      <option value="Ajay">Ajay</option>
+      <option value="Bhawna">Bhawna</option>
+      <option value="Priyanka">Priyanka</option>
+      <option value="Saba">Saba</option>
+      <option value="Somya">Somya</option>
+      <option value="Vikesh">Vikesh</option>
+    </select>
+		</div>
+	</div>
+  <div class="form-row">
+    <div class="form-group col-md-3">
+		<label for="asnone" >Therapist 1</label>
+		<select type="text"name="asnone" id="asnone" class="form-control" style="font-size: 15px" placeholder="******">
+      <option value="" ></option>
+      <? for(var i = 0; i < asgnone.length; i++) { ?>      
+      <option value="<?= asgnone[i] ?>" ><?= asgnone[i] ?></option><? } ?>
+      </select>
+	</div>
+  <div class="form-group col-md-3">
+			<label for="asnto">Therapist 2</label>
+			<select type="text"name="asnto" id="asnto" class="form-control" style="font-size: 15px" placeholder="******">
+      <option value="" ></option>
+      <? for(var i = 0; i < asgnone.length; i++) { ?>      
+      <option value="<?= asgnone[i] ?>" ><?= asgnone[i] ?></option><? } ?>
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+			<label for="asnthr">Therapist 3</label>
+			<select type="text"name="asnthr" id="asnthr" class="form-control" style="font-size: 15px" placeholder="******">
+      <option value="" ></option>
+      <? for(var i = 0; i < asgnone.length; i++) { ?>      
+      <option value="<?= asgnone[i] ?>" ><?= asgnone[i] ?></option><? } ?>
+      </select>
+		</div>
+    <div class="form-group col-md-3">
+		<label for="sts">Status</label>
+		<select class="form-control" id="sts" name="sts">
+      <option value=""></option>
+      <option value="Arrived">Arrived</option>
+      <option value="Cancelled">Cancelled</option>
+      <option value="Reschedule">Reschedule</option>
+    </select>
+		</div>
+	</div>
+    	<button type="submit" class="btn btn-primary">Submit</button>
+    <input class="btn btn-primary" type="reset" value="Reset">
+    </div> 
+</form>>
+      <br><br>
+      <br>
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+  <div class="container-fluid">
+    <div class="col-xl-12">
+   
+
+      <p class="h4 mb-4 text-center">Display and Update Client Details</p>
+      <br>
+
+
+      <div class="text-dark">Minimum date:</td>
+        <input type='date' id='min' name='min' onchange="getAllData()">
+      </div>
+      <br>
+      <div  class="text-dark">Maximum date:</td>
+        <input type='date' id='max' name='max' onchange="getAllData()">
+      </div>
+      <br>
+      <br>
+      <button type="button" class="btn btn-warning btn-sm" onclick="clearFilter()">Clear Filter</button>
+      <button type="button" class="btn btn-info">Client Details Update</button>
+      <button type="button" class="btn btn-success">Show</button>
+      <button type="button" class="btn btn-warning">Hide</button>
+      <br>
+
+      <div id="dataTable" class="table-responsive">
+        <!-- The Data Table is inserted here by JavaScript -->
+      </div>
+
+      <br>
+      <br>
+      <button type="button" class="btn btn-success btn-sm" onclick="getAllData()">Get ALL Data</button>
+    </div>
+  </div>
+  </div>
+  
+
+      <script>
+        $(document).ready(function(){
+  $(".btn-info").click(function(){
+    $(".table-responsive").collapse('toggle');
+  });
+  $(".btn-success").click(function(){
+    $("#myForm").collapse('show');
+  });
+  $(".btn-warning").click(function(){
+    $("#myForm").collapse('hide');
+  });
+});
+
+      </script>
+
+</body>
+
+</html>

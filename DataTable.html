@@ -1,0 +1,13 @@
+<p class="h4 mb-4 text-center">Contact Details Database</p>
+
+           <div>Minimum date:</td>
+            <input type='date' id='min' name='min' onchange="getAllData()"></div>
+            <div>Maximum date:</td>
+            <input type='date' id='max' name='max' onchange="getAllData()"></div>
+  
+<button type="button" class="btn btn-warning btn-sm" onchange="clearFilter()">Clear Filter</button>
+<div id="data-table" class="table-responsive">
+  <!-- The Data Table is inserted here by JavaScript -->
+</div>
+<br>
+<button type="button" class="btn btn-success btn-sm" onclick="getAllData()">Get ALL Data</button>
